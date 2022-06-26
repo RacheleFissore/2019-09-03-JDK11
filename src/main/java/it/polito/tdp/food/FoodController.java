@@ -40,7 +40,7 @@ public class FoodController {
     private Button btnCammino; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxPorzioni"
-    private ComboBox<?> boxPorzioni; // Value injected by FXMLLoader
+    private ComboBox<String> boxPorzioni; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -49,19 +49,30 @@ public class FoodController {
     void doCammino(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Cerco cammino peso massimo...");
+    	txtResult.appendText(model.trovaSequenza(Integer.parseInt(txtPassi.getText()), boxPorzioni.getValue()));
     }
 
     @FXML
     void doCorrelate(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Cerco porzioni correlate...");
+    	txtResult.appendText("Cerco porzioni correlate...\n");
     	
+    	txtResult.appendText(model.getCorrelate(boxPorzioni.getValue()));
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Creazione grafo...");
+    	try {
+			int n = Integer.parseInt(txtCalorie.getText());
+			model.creaGrafo(n);
+			txtResult.appendText("\n# VERTICI: " + model.nVertici() + "\n# ARCHI: " + model.nArchi());
+			boxPorzioni.getItems().addAll(model.getPortionName());
+		} catch (NumberFormatException e) {
+			throw e;
+		}
+    	
     	
     }
 
